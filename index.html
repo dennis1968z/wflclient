@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="format-detection" content="telephone=no,email=no,address=no" />
+<title>WFL 技术资产信号</title>
+<meta name="description" content="WFL Technology Asset Signal Infrastructure — 从证据与竞争关系结构，到可解释、可交付的技术资产信号。本地演示 · 合成数据 · 非投资建议。" />
+<style>
+:root{
+  --paper:#f0ece2; --paper-2:#f7f4ec; --ink:#191814; --ink-2:#55524a; --mute:#7d7767; --rule:#d6cfbe; --rule-2:#b9b19b;
+  --bronze:#76663f; --sub:#2a4d7a; --com:#1f6b5c; --con:#9b2f22;
+  --dk:#191814; --dk-2:#22211b; --dk-rule:#3a382f; --bone:#ece6d6; --bone-2:#b3ac98; --flare:#e88c42;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Songti SC","Noto Serif CJK SC","Source Han Serif SC",STSong,SimSun,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue","PingFang SC","HarmonyOS Sans SC","Noto Sans CJK SC","Microsoft YaHei",Roboto,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"PingFang SC","Microsoft YaHei",monospace;
+  --gut:20px; --hh:56px; --sh:44px; color-scheme:light;
+}
+body[data-lang="zh"]{--serif:"Songti SC","Noto Serif CJK SC","Source Han Serif SC",STSong,"Iowan Old Style",Georgia,SimSun,serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p,ol,ul,dl,dd{margin:0;padding:0}
+ol,ul{list-style:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0;text-align:left}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+section{scroll-margin-top:calc(var(--hh) + var(--sh))}
+.wrap{width:min(1120px,100% - 2*var(--gut));margin-inline:auto}
+@media (min-width:800px){:root{--gut:40px;--hh:64px}}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eb{font:500 11px/1.5 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--bronze)}
+body[data-lang="zh"] .eb{letter-spacing:.12em}
+.hs{font-family:var(--serif);font-weight:400;letter-spacing:-.03em;line-height:1.05;text-wrap:balance}
+body[data-lang="zh"] .hs{letter-spacing:-.01em;line-height:1.24;font-weight:500}
+.lede{font-size:17px;color:var(--ink-2);max-width:58ch;line-height:1.65}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 26px;background:var(--ink);color:var(--bone);border:1px solid var(--ink);font:700 13px var(--sans);letter-spacing:.05em;text-align:center}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.light{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+.btn.block{display:flex;width:100%}
+.lnk{display:inline-flex;align-items:center;gap:8px;min-height:44px;font:500 14px var(--sans);border-bottom:1px solid var(--ink);padding:0 0 4px;align-self:flex-start}
+.note{font:400 12px/1.65 var(--mono);color:var(--ink-2);max-width:74ch}
+.note::before{content:"※ ";color:var(--bronze)}
+.tagl{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border:1px solid currentColor;font:500 10px var(--mono);letter-spacing:.16em;text-transform:uppercase}
+.sec{padding:80px 0}
+.sec h2{font-size:clamp(34px,9.4vw,62px);margin-top:18px;max-width:16ch}
+body[data-lang="zh"] .sec h2{font-size:clamp(30px,8.2vw,52px);max-width:14em}
+.sec .lede{margin-top:22px}
+.dark{background:var(--dk);color:var(--bone)}
+.dark .eb{color:var(--bone-2)} .dark .lede,.dark .note{color:var(--bone-2)}
+
+/* header + strip */
+.hd{position:sticky;top:0;z-index:60;background:var(--paper);border-bottom:1px solid var(--rule)}
+.hd .wrap{display:flex;align-items:center;height:var(--hh);gap:14px}
+.wm{font:700 13px var(--sans);letter-spacing:.28em;white-space:nowrap}
+.wm small{display:none;font:400 10px var(--mono);letter-spacing:.14em;color:var(--mute);margin-left:10px}
+.hd-r{margin-left:auto;display:flex;align-items:center;gap:4px}
+.lang{display:flex;align-items:center;font:500 12px var(--sans);color:var(--mute)}
+.lang button{min-width:44px;min-height:44px;display:grid;place-items:center;color:var(--mute)}
+.lang button.on{color:var(--ink);font-weight:700}
+.menu{min-height:44px;padding:0 4px 0 10px;font:500 13px var(--sans);letter-spacing:.06em}
+@media (min-width:800px){.wm small{display:inline}.hd-r{gap:12px}}
+.strip{position:sticky;top:var(--hh);z-index:55;background:var(--paper);border-bottom:1px solid var(--rule);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.strip::-webkit-scrollbar{display:none}
+.strip .in{display:flex;width:max-content;min-width:100%;padding:0 max(var(--gut),calc((100vw - 1120px)/2))}
+.strip button{flex:none;min-height:var(--sh);display:flex;align-items:center;gap:8px;padding:0 14px 0 0;margin-right:6px;font:500 13px var(--sans);color:var(--mute);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.strip button b{font:400 10px var(--mono);letter-spacing:.08em}
+.strip button.on{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
+
+/* hero */
+.hero{padding:52px 0 40px}
+.hero h1{font-size:clamp(42px,12.6vw,92px);margin-top:20px;max-width:15ch}
+body[data-lang="zh"] .hero h1{font-size:clamp(35px,10.2vw,78px);max-width:12em}
+.hero .lede{margin-top:24px}
+.hero .cta{display:flex;flex-direction:column;gap:18px;margin-top:32px}
+.pilot{display:flex;gap:10px;align-items:flex-start;margin-top:40px;font:400 11px/1.7 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.pilot i{width:7px;height:7px;border-radius:50%;background:var(--bronze);flex:none;margin-top:7px}
+@media (min-width:800px){.hero{padding:92px 0 68px}.hero .cta{flex-direction:row;align-items:center;gap:32px}.hero .btn{min-width:250px}}
+
+/* band */
+.band{background:var(--dk);color:var(--bone)}
+.stage{position:relative;height:min(84vw,500px);min-height:290px}
+.stage canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+.stage .ov{position:absolute;left:var(--gut);top:18px;pointer-events:none}
+.stage .ov .k{font:400 10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--bone-2)}
+.stage .ov .n{font:400 clamp(56px,16vw,96px)/1 var(--serif);letter-spacing:-.04em;margin-top:2px}
+.stage .ov .n small{font:400 13px var(--mono);letter-spacing:0;color:var(--bone-2);margin-left:6px}
+.stage .rt2{position:absolute;right:var(--gut);top:18px;pointer-events:none}
+.cap{background:#12110e;padding:16px 0;font:400 11px/1.7 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--bone-2)}
+.rt{display:inline-flex;align-items:center;padding:4px 10px;font:700 11px var(--mono);letter-spacing:.16em;border:1px solid currentColor}
+.rt.STRONG{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+.rt.MODERATE{color:var(--bone)}
+.rt.WATCH{color:var(--flare);border-style:dashed}
+.paper .rt.STRONG,.rt.p.STRONG{background:var(--ink);color:var(--bone);border-color:var(--ink)}
+.rt.p.MODERATE{color:var(--ink)} .rt.p.WATCH{color:var(--con)}
+
+/* positioning */
+.pos{border-top:1px solid var(--rule);margin-top:28px}
+.pos li{display:grid;grid-template-columns:1fr;gap:6px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.pos .k{font:400 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--bronze)}
+.pos .v{font:400 clamp(20px,5vw,26px)/1.35 var(--serif);letter-spacing:-.01em}
+body[data-lang="zh"] .pos .v{font-weight:500}
+@media (min-width:800px){.pos li{grid-template-columns:200px 1fr;align-items:baseline}}
+
+/* overview */
+.flow{margin-top:40px;border-top:1px solid var(--ink)}
+.flow button{display:grid;grid-template-columns:44px 1fr auto;align-items:baseline;width:100%;padding:16px 0;border-bottom:1px solid var(--rule);min-height:56px}
+.flow .n{font:400 11px var(--mono);color:var(--mute)}
+.flow .t{font:400 20px/1.3 var(--serif);letter-spacing:-.01em}
+body[data-lang="zh"] .flow .t{font-weight:500}
+.flow .ar{font:400 13px var(--mono);color:var(--mute)}
+@media (min-width:900px){.flow{display:grid;grid-template-columns:repeat(6,1fr)}.flow button{display:block;padding:20px 14px 20px 0;border-bottom:0;border-right:1px solid var(--rule);margin-right:14px}.flow button:last-child{border-right:0}.flow .n{display:block;margin-bottom:10px}.flow .t{font-size:18px}.flow .ar{display:none}}
+.mets{display:grid;grid-template-columns:1fr 1fr;margin-top:44px;border-top:1px solid var(--ink)}
+.met{padding:20px 14px 22px 0;border-bottom:1px solid var(--rule)}
+.met:nth-child(odd){border-right:1px solid var(--rule);margin-right:14px}
+.met:nth-child(even){padding-left:0}
+.met .k{font:400 10px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--bronze)}
+.met .k span{display:block;color:var(--mute)}
+.met .n{font:400 clamp(44px,12vw,72px)/1 var(--serif);letter-spacing:-.04em;margin-top:10px}
+.met .n small{font:400 13px var(--mono);letter-spacing:0;color:var(--mute);margin-left:4px}
+.met .s{font:400 11px/1.55 var(--mono);color:var(--ink-2);margin-top:8px}
+@media (min-width:900px){.mets{grid-template-columns:repeat(4,1fr)}.met{border-bottom:0;border-right:1px solid var(--rule);padding:24px 20px 24px 0;margin-right:20px}.met:nth-child(odd){margin-right:20px}.met:last-child{border-right:0}}
+.acts{display:flex;flex-direction:column;gap:12px;margin-top:32px}
+.acts .btn{width:100%}
+@media (min-width:600px){.acts{flex-direction:row;align-items:center}.acts .btn{width:auto;min-width:200px}}
+.runst{margin-top:16px;font:400 12px/1.7 var(--mono);color:var(--ink-2)}
+.runst.dirty{color:var(--con)}
+body.stale .down{opacity:.5;transition:opacity .2s}
+.stl{display:none;margin-left:8px;color:var(--con);border-color:var(--con)}
+body.stale .stl{display:inline-flex}
+
+/* evidence */
+.steps4{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:28px;font:500 12px var(--mono);letter-spacing:.06em;color:var(--ink-2)}
+.steps4 span.a{color:var(--mute)}
+.ebar{display:flex;height:14px;margin-top:36px;border:1px solid var(--ink)}
+.ebar i{display:block;height:100%}
+.cats{margin-top:20px;border-top:1px solid var(--ink)}
+.cat{display:grid;grid-template-columns:18px 1fr auto;gap:2px 14px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--rule)}
+.cat .sq{width:12px;height:12px;margin-top:6px;border:1px solid var(--ink)}
+.cat .nm{font:400 20px/1.3 var(--serif);letter-spacing:-.01em}
+body[data-lang="zh"] .cat .nm{font-weight:500}
+.cat .ct{font:400 clamp(30px,8vw,40px)/1 var(--serif);letter-spacing:-.03em}
+.cat .ds{grid-column:2/4;color:var(--ink-2);font-size:14px}
+.tr{margin-top:56px}
+.tr h3,.blk h3{font:500 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--bronze);margin-bottom:10px}
+body[data-lang="zh"] .tr h3,body[data-lang="zh"] .blk h3{letter-spacing:.12em}
+.evr{border-bottom:1px solid var(--rule)}
+.evr>button{display:grid;grid-template-columns:64px 1fr 20px;gap:4px 12px;align-items:start;width:100%;padding:16px 0;min-height:64px}
+.evr .id{font:500 12px var(--mono);padding-top:3px}
+.evr .tx{font-size:15px;line-height:1.55}
+.evr .sb{display:block;margin-top:6px;font:400 11px var(--mono);letter-spacing:.06em;color:var(--bronze)}
+.evr .pl{font:300 22px/1 var(--sans);color:var(--ink);text-align:right}
+.evr .dt{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;padding:0 0 18px 76px;font-size:13px;color:var(--ink-2)}
+.evr .dt b{font:400 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+
+/* relations */
+.rel-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:36px;margin-top:40px}.rel-grid>*{min-width:0}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1*var(--gut));padding:0 var(--gut)}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;min-height:44px;padding:0 18px;border:1px solid var(--rule-2);font:500 13px var(--sans);white-space:nowrap}
+.chips button.on{background:var(--ink);color:var(--bone);border-color:var(--ink)}
+.gv{display:block;width:100%;height:auto;background:var(--paper-2);border:1px solid var(--rule-2);margin-top:14px}
+.gv text{font-family:var(--sans)}
+.gv .rl{font:400 9px var(--mono);letter-spacing:.06em;fill:var(--mute)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;font:400 12px var(--mono);color:var(--ink-2)}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:8px}
+.key{margin-top:18px;border-top:1px solid var(--rule)}
+.key li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule);font-size:14px}
+.key li span:last-child{font:400 11px var(--mono);color:var(--bronze);text-align:right;letter-spacing:.06em}
+.insp{border:1px solid var(--ink);background:var(--paper-2)}
+.insp .hd2{padding:14px 18px;border-bottom:1px solid var(--ink);font:400 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:space-between;gap:10px}
+.insp .bd{padding:18px}
+label.fl{display:block;font:500 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--bronze);margin-bottom:8px}
+body[data-lang="zh"] label.fl{letter-spacing:.1em}
+select{display:block;width:100%;min-height:52px;padding:0 44px 0 14px;border:1px solid var(--ink);background:var(--paper);font-size:16px;border-radius:0;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),linear-gradient(135deg,var(--ink) 50%,transparent 50%);background-position:calc(100% - 22px) 23px,calc(100% - 16px) 23px;background-size:6px 6px;background-repeat:no-repeat}
+select:focus{outline:2px solid var(--ink);outline-offset:2px}
+.sl{margin-top:20px}
+.slh{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.slh b{font:500 22px var(--mono)}
+input[type=range]{display:block;width:100%;height:44px;margin:2px 0 0;background:transparent;-webkit-appearance:none;appearance:none}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--ink)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-12.5px;background:var(--ink);border:4px solid var(--paper-2);box-shadow:0 0 0 1px var(--ink);border-radius:0}
+input[type=range]::-moz-range-track{height:3px;background:var(--ink)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;background:var(--ink);border:4px solid var(--paper-2);border-radius:0;box-shadow:0 0 0 1px var(--ink)}
+.evi{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:12px 0;border-top:1px solid var(--rule);font-size:14px;color:var(--ink-2)}
+.evi b{font:500 12px var(--mono);color:var(--ink)}
+.outs{margin-top:36px;border-top:1px solid var(--ink)}
+.outs .r{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.outs .a{font:500 15px var(--sans)}
+.outs .s{font:500 15px var(--mono);text-align:right}
+.outs .m{grid-column:1/-1;font:400 11px var(--mono);letter-spacing:.06em;color:var(--mute)}
+@media (min-width:900px){.rel-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px;align-items:start}.chips{margin-inline:0;padding-inline:0}}
+
+/* factors */
+.fac-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:44px;margin-top:40px}.fac-grid>*{min-width:0}
+.fac{border-top:1px solid var(--ink);padding-top:18px}
+.fac+.fac{margin-top:26px}
+.fac .nm{font:400 24px/1.2 var(--serif);letter-spacing:-.01em}
+body[data-lang="zh"] .fac .nm{font-weight:500}
+.fac .ds{font:400 12px var(--mono);letter-spacing:.04em;color:var(--mute);margin-top:4px}
+.ck{display:flex;align-items:center;gap:14px;min-height:56px;margin-top:8px;padding:8px 0;border-top:1px dashed var(--rule-2);cursor:pointer}
+.ck input{flex:none;width:26px;height:26px;margin:0;accent-color:var(--ink)}
+.ck b{display:block;font:500 15px var(--sans)}
+.ck small{display:block;font-size:12px;color:var(--mute);line-height:1.45}
+.two{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;margin-top:30px}.two>*{min-width:0}
+@media (min-width:600px){.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.pipe{margin-top:40px;border-top:1px solid var(--ink)}
+.stg{display:grid;grid-template-columns:44px 1fr auto;gap:2px 8px;align-items:baseline;padding:16px 10px 16px 0;border-bottom:1px solid var(--rule);transition:background .25s,color .25s}
+.stg .n{font:400 11px var(--mono);color:var(--mute)}
+.stg .t{font:400 19px/1.3 var(--serif)}
+body[data-lang="zh"] .stg .t{font-weight:500}
+.stg .o{font:500 15px var(--mono);text-align:right}
+.stg .d{grid-column:2/4;font:400 12px var(--mono);color:var(--mute)}
+.stg.act{background:var(--bone);color:var(--ink);padding-left:10px;margin-left:-10px;margin-right:-10px;padding-right:20px}
+.stg.act .n,.stg.act .d{color:var(--ink-2)}
+.ch{display:block;width:100%;height:auto;margin-top:8px}
+.ch text{font:400 10px var(--mono);fill:var(--mute)}
+.ch .g{stroke:var(--rule);stroke-width:1}
+.lgd{display:flex;flex-wrap:wrap;gap:6px 18px;font:400 11px var(--mono);color:var(--ink-2);margin:10px 0 0}
+.lgd i{display:inline-block;width:20px;height:0;border-top:2px solid;vertical-align:middle;margin-right:6px}
+@media (min-width:900px){.fac-grid{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:64px;align-items:start}.fac-grid .right{position:sticky;top:130px}}
+
+/* signal */
+.sig-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:40px;margin-top:40px}.sig-grid>*{min-width:0}
+.sbox{border:1px solid var(--ink);background:var(--paper-2)}
+.sbox .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--ink)}
+.sbox .top .tagl{color:var(--ink)}
+.bigsc{display:flex;align-items:baseline;gap:8px;padding:22px 18px 4px}
+.bigsc .n{font:400 clamp(88px,26vw,140px)/.95 var(--serif);letter-spacing:-.05em}
+.bigsc .of{font:400 16px var(--mono);color:var(--mute)}
+.rdesc{padding:0 18px;font:400 22px/1.3 var(--serif);letter-spacing:-.01em}
+body[data-lang="zh"] .rdesc{font-weight:500}
+.rstat{padding:10px 18px 18px;font:400 11px/1.7 var(--mono);letter-spacing:.06em;color:var(--ink-2)}
+.tabs{display:flex;border-top:1px solid var(--ink)}
+.tabs button{flex:1;min-height:52px;text-align:center;font:500 12px var(--mono);letter-spacing:.14em;color:var(--mute);border-right:1px solid var(--ink)}
+.tabs button:last-child{border-right:0}
+.tabs button.on{background:var(--ink);color:var(--bone)}
+.pane{padding:20px 18px 22px}
+.hr p{font-size:16px;line-height:1.75;color:var(--ink)}
+.kv{margin-top:20px;border-top:1px solid var(--rule)}
+.kv li{display:grid;grid-template-columns:1fr auto;gap:2px 14px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.kv .k{font-size:14px;color:var(--ink-2)}
+.kv .v{font:500 14px var(--mono);text-align:right}
+.kv button.v{border-bottom:1px solid var(--ink);padding-bottom:2px}
+pre.json{margin:0;padding:16px;background:var(--dk);color:var(--bone);font:400 12px/1.65 var(--mono);overflow:auto;max-height:420px;-webkit-overflow-scrolling:touch;tab-size:2;white-space:pre}
+.expo{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.expo .m{font:400 11px var(--mono);color:var(--mute)}
+@media (min-width:900px){.sig-grid{grid-template-columns:minmax(0,1fr);}}
+
+/* delivery */
+.dl2{display:grid;gap:0;margin-top:40px;border-top:1px solid var(--ink)}
+.dl2>div{padding:26px 0;border-bottom:1px solid var(--rule)}
+.dl2 .k{font:500 11px var(--mono);letter-spacing:.16em;color:var(--bronze)}
+.dl2 h3{font:400 28px/1.2 var(--serif);letter-spacing:-.01em;margin-top:8px}
+body[data-lang="zh"] .dl2 h3{font-weight:500}
+.dl2 p{margin-top:8px;color:var(--ink-2);max-width:46ch}
+@media (min-width:800px){.dl2{grid-template-columns:1fr 1fr}.dl2>div{padding-right:40px}}
+.buy{margin-top:8px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tags span{padding:10px 16px;border:1px solid var(--bone-2);font:500 13px var(--mono);letter-spacing:.06em}
+.dark .buy h3{font:400 clamp(26px,7vw,36px)/1.2 var(--serif);letter-spacing:-.01em;color:var(--bone);margin:0}
+body[data-lang="zh"] .dark .buy h3{font-weight:500}
+.dark .buy p{margin-top:10px;color:var(--bone-2);max-width:56ch}
+
+footer{background:#12110e;color:var(--bone-2);padding:44px 0 calc(40px + env(safe-area-inset-bottom))}
+footer .wm{color:var(--bone)}
+footer p{margin-top:12px;font-size:14px}
+footer .small{font:400 11px/1.8 var(--mono);letter-spacing:.08em;margin-top:22px;padding-top:18px;border-top:1px solid var(--dk-rule);text-transform:uppercase}
+.pad-run{height:0}
+body.stale .pad-run{height:76px}
+
+/* run bar (appears when parameters changed) */
+.runbar{position:fixed;left:0;right:0;bottom:0;z-index:70;display:none;align-items:center;justify-content:space-between;gap:14px;background:var(--ink);color:var(--bone);padding:10px var(--gut) calc(10px + env(safe-area-inset-bottom));box-shadow:0 -6px 24px rgba(25,24,20,.25)}
+.runbar.on{display:flex}
+.runbar span{font:400 12px/1.4 var(--mono);letter-spacing:.06em}
+.runbar .btn{min-height:46px;padding:0 20px;flex:none}
+
+/* overlay */
+.ovl{position:fixed;top:0;right:0;bottom:0;left:0;z-index:100;background:var(--paper);overflow:auto;display:none;padding-bottom:env(safe-area-inset-bottom)}
+.ovl.on{display:block}
+.ovl-hd{display:flex;align-items:center;justify-content:space-between;height:var(--hh);border-bottom:1px solid var(--rule)}
+.ovl nav a{display:grid;grid-template-columns:44px 1fr;align-items:baseline;min-height:68px;padding:14px 0;border-bottom:1px solid var(--rule);font:400 clamp(26px,7.4vw,40px)/1.15 var(--serif);letter-spacing:-.02em}
+body[data-lang="zh"] .ovl nav a{font-weight:500;letter-spacing:0}
+.ovl nav a span{font:400 11px var(--mono);color:var(--mute)}
+.stc{margin:28px 0 0;padding:20px;border:1px solid var(--ink);background:var(--paper-2)}
+.stc p{margin:12px 0 0;font:400 15px/1.55 var(--serif)}
+body[data-lang="zh"] .stc p{font-weight:500}
+.stc dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin-top:14px;font-size:13px}
+.stc dt{color:var(--mute)} .stc dd{text-align:right;font-family:var(--mono);font-size:12px}
+.ovl .lg{display:flex;justify-content:center;margin:20px 0 8px}
+.ovl .dsc{font:400 11px/1.8 var(--mono);letter-spacing:.06em;color:var(--mute);margin:8px 0 32px;text-transform:uppercase}
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translate(-50%,16px);z-index:200;max-width:min(92vw,420px);background:var(--ink);color:var(--bone);padding:13px 20px;font:500 14px var(--sans);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;text-align:center;border:1px solid var(--bone-2)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001s!important}}
+</style>
+</head>
+<body data-lang="en">
+
+<header class="hd"><div class="wrap">
+  <a class="wm" href="#top" aria-label="WFL">WFL ·<small>TECHNOLOGY ASSET SIGNAL</small></a>
+  <div class="hd-r">
+    <div class="lang" role="group" aria-label="Language"><button data-lang="en" class="on">EN</button><span>/</span><button data-lang="zh">中文</button></div>
+    <button class="menu" data-act="menu" data-i="menu">Menu</button>
+  </div>
+</div></header>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+  <div class="eb" data-i="h.eb"></div>
+  <h1 class="hs" data-i="h.h"></h1>
+  <p class="lede" data-i="h.p"></p>
+  <div class="cta"><a class="btn" href="#overview" data-i="h.cta"></a><a class="lnk" href="#band"><span data-i="h.link"></span><span aria-hidden="true">↘</span></a></div>
+  <div class="pilot"><i></i><span data-i="disc"></span></div>
+</div></section>
+
+<section class="band" id="band" aria-label="Signal evolution">
+  <div class="stage">
+    <canvas id="heroCv" role="img" aria-label="Signal evolution"></canvas>
+    <div class="ov"><div class="k" data-i="band.k"></div><div class="n mono" id="heroN"></div></div>
+    <div class="rt2" id="heroRt"></div>
+  </div>
+  <div class="cap"><div class="wrap" data-i="cap"></div></div>
+</section>
+
+<nav class="strip" id="strip" aria-label="Workspace"><div class="in" id="stripIn"></div></nav>
+
+<section class="sec" style="padding-bottom:0"><div class="wrap">
+  <div class="eb" data-i="p.eb"></div>
+  <ul class="pos">
+    <li><span class="k" data-i="p1.k"></span><span class="v" data-i="p1.v"></span></li>
+    <li><span class="k" data-i="p2.k"></span><span class="v" data-i="p2.v"></span></li>
+    <li><span class="k" data-i="p3.k"></span><span class="v" data-i="p3.v"></span></li>
+  </ul>
+</div></section>
+
+<section class="sec" id="overview"><div class="wrap">
+  <div class="eb" data-i="o.eb"></div>
+  <h2 class="hs" data-i="o.h"></h2>
+  <p class="lede" data-i="o.p"></p>
+  <div class="flow" id="flow"></div>
+  <div class="mets" id="mets"></div>
+  <div class="acts">
+    <button class="btn" data-act="run" data-i="run"></button>
+    <button class="btn ghost" data-act="reset" data-i="reset"></button>
+  </div>
+  <p class="runst" id="runst"></p>
+  <p class="note" style="margin-top:14px" data-i="run.why"></p>
+</div></section>
+
+<section class="sec dark" id="evidence"><div class="wrap">
+  <div class="eb" data-i="e.eb"></div>
+  <h2 class="hs" data-i="e.h"></h2>
+  <p class="lede" data-i="e.p"></p>
+  <div class="steps4 mono" id="steps4"></div>
+  <div class="ebar" id="ebar" style="border-color:var(--bone-2)"></div>
+  <div class="cats" id="cats" style="border-color:var(--bone-2)"></div>
+  <div class="tr"><h3 style="color:var(--bone-2)" data-i="e.tr"></h3><div id="evlist"></div></div>
+  <p class="note" style="margin-top:28px" data-i="e.note"></p>
+</div></section>
+
+<section class="sec" id="relations"><div class="wrap">
+  <div class="eb" data-i="r.eb"></div>
+  <h2 class="hs" data-i="r.h"></h2>
+  <p class="lede" data-i="r.p"></p>
+  <div class="rel-grid">
+    <div>
+      <div class="chips" id="relChips"></div>
+      <svg class="gv" id="gv" viewBox="0 0 360 312" role="img" aria-label="Relationship graph"></svg>
+      <div class="legend" id="legend"></div>
+      <ul class="key" id="key"></ul>
+    </div>
+    <div class="insp">
+      <div class="hd2"><span data-i="r.insp"></span><span id="inspTag"></span></div>
+      <div class="bd">
+        <label class="fl" for="relType" data-i="r.type"></label>
+        <select id="relType"><option value="substitute" data-i="ty.substitute"></option><option value="complement" data-i="ty.complement"></option><option value="confront" data-i="ty.confront"></option></select>
+        <div class="sl"><div class="slh"><label class="fl" for="relStr" style="margin:0" data-i="r.str"></label><b id="relStrV"></b></div>
+          <input type="range" id="relStr" min="0" max="100" step="1"></div>
+        <div style="margin-top:24px"><label class="fl" data-i="r.ev"></label><div id="inspEv"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="outs" id="outs"></div>
+  <p class="note" style="margin-top:20px" id="outNote"></p>
+  <p class="note" style="margin-top:8px" data-i="r.hint"></p>
+</div></section>
+
+<section class="sec dark" id="factors"><div class="wrap">
+  <div class="eb" data-i="f.eb"></div>
+  <h2 class="hs" data-i="f.h"></h2>
+  <div class="fac-grid" style="color:var(--ink)">
+    <div style="background:var(--paper);padding:22px 20px 26px;color:var(--ink)">
+      <div class="fac">
+        <div class="slh"><div><div class="nm" data-i="ft"></div><div class="ds" data-i="ft.d"></div></div><b class="mono" style="font-size:24px" id="vT"></b></div>
+        <input type="range" id="inT" min="0" max="100" step="1" aria-label="Technology">
+      </div>
+      <div class="fac">
+        <div class="slh"><div><div class="nm" data-i="fi"></div><div class="ds" data-i="fi.d"></div></div><b class="mono" style="font-size:24px" id="vIP"></b></div>
+        <input type="range" id="inIP" min="0" max="100" step="1" aria-label="IP">
+        <label class="ck" for="inBk"><input type="checkbox" id="inBk"><span><b data-i="fi.b"></b><small data-i="fi.bd"></small></span></label>
+      </div>
+      <div class="fac">
+        <div class="slh"><div><div class="nm" data-i="fd"></div><div class="ds" data-i="fd.d"></div></div><b class="mono" style="font-size:24px" id="vI"></b></div>
+        <input type="range" id="inI" min="0" max="100" step="1" aria-label="Industry">
+      </div>
+      <p class="note" style="margin-top:22px" data-i="f.w"></p>
+      <div class="two">
+        <div><label class="fl" for="inWin" data-i="f.win"></label><select id="inWin"><option value="30" data-i="d30"></option><option value="90" data-i="d90"></option><option value="180" data-i="d180"></option></select></div>
+        <div><label class="fl" for="inEvt" data-i="f.evt"></label><select id="inEvt"><option value="neutral" data-i="ev.neutral"></option><option value="positive" data-i="ev.positive"></option><option value="stress" data-i="ev.stress"></option></select></div>
+      </div>
+      <p class="note" style="margin-top:20px" data-i="r.hint"></p>
+    </div>
+    <div class="right" style="color:var(--bone)">
+      <div class="eb" style="margin-bottom:6px" data-i="f.pipe"></div>
+      <div class="pipe" id="pipe" style="border-color:var(--bone-2)"></div>
+    </div>
+  </div>
+  <div style="margin-top:56px;background:var(--paper);color:var(--ink);padding:22px 20px 24px" class="down">
+    <div class="slh"><label class="fl" style="margin:0" data-i="f.chart"></label><span class="mono" style="font-size:12px;color:var(--mute)" id="winL"></span></div>
+    <div id="chartBox"></div>
+    <div class="lgd" id="lgd"></div>
+    <p class="note" style="margin-top:14px" data-i="f.note"></p>
+  </div>
+</div></section>
+
+<section class="sec" id="signal"><div class="wrap">
+  <div class="eb" data-i="s.eb"></div>
+  <h2 class="hs" data-i="s.h"></h2>
+  <div class="sig-grid"><div class="sbox down">
+    <div class="top"><span class="tagl">GPU TECHNOLOGY ASSET</span><span class="tagl stl" data-i="stale"></span></div>
+    <div class="bigsc"><span class="n" id="sN"></span><span class="of">/ 100</span></div>
+    <div style="padding:6px 18px 8px" id="sRt"></div>
+    <div class="rdesc" id="sDesc"></div>
+    <div class="rstat" id="sSt"></div>
+    <div class="tabs" role="tablist"><button role="tab" class="on" data-tab="hr">HUMAN READ</button><button role="tab" data-tab="mr">MACHINE READ</button></div>
+    <div class="pane hr" id="paneH"></div>
+    <div class="pane" id="paneM" style="display:none;padding:0"><pre class="json" id="json" tabindex="0"></pre></div>
+  </div></div>
+  <div class="expo"><button class="btn" data-act="export" data-i="s.exp"></button><span class="m" id="expM"></span></div>
+  <p class="note" style="margin-top:18px" data-i="s.note"></p>
+</div></section>
+
+<section class="sec dark" id="delivery"><div class="wrap">
+  <div class="eb" data-i="d.eb"></div>
+  <h2 class="hs" data-i="d.h"></h2>
+  <div class="dl2" style="border-color:var(--bone-2)">
+    <div style="border-color:var(--dk-rule)"><div class="k" style="color:var(--bone-2)">MACHINE READ</div><h3>API / MCP / JSON</h3><p style="color:var(--bone-2)" data-i="d.m.d"></p></div>
+    <div style="border-color:var(--dk-rule)"><div class="k" style="color:var(--bone-2)">HUMAN READ</div><h3>PC / Mobile</h3><p style="color:var(--bone-2)" data-i="d.h.d"></p></div>
+  </div>
+  <div class="buy" style="margin-top:44px">
+    <div class="eb" data-i="d.b"></div>
+    <h3 style="margin-top:12px" data-i="d.b.t"></h3>
+    <p data-i="d.b.d"></p>
+    <div class="tags"><span>Equity</span><span>Options</span><span>Quant</span><span>Research</span><span>Prediction Market</span></div>
+  </div>
+  <p class="note" style="margin-top:30px" data-i="d.note"></p>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="wm">WFL ·</div>
+  <p>WFL · Technology Asset Signal Infrastructure</p>
+  <p class="small" data-i="disc"></p>
+</div><div class="pad-run"></div></footer>
+
+<div class="runbar" id="runbar"><span data-i="bar.t"></span><button class="btn light" data-act="run" data-i="run"></button></div>
+
+<div class="ovl" id="menuOvl" role="dialog" aria-modal="true" aria-label="Menu"><div class="wrap">
+  <div class="ovl-hd"><span class="wm">WFL ·</span><button class="menu" data-act="close" data-i="close"></button></div>
+  <div class="eb" style="margin-top:22px" data-i="nav.t"></div>
+  <nav id="menuNav" style="margin-top:8px"></nav>
+  <div class="stc">
+    <span class="tagl" style="color:var(--bronze)" data-i="st.tag"></span>
+    <p data-i="st.line"></p>
+    <dl><dt data-i="st.ws"></dt><dd data-i="st.wsv"></dd><dt data-i="st.ver"></dt><dd>WFL Demo 0.2</dd></dl>
+  </div>
+  <div class="lg lang"><button data-lang="en">EN</button><span>/</span><button data-lang="zh">中文</button></div>
+  <p class="dsc" data-i="disc"></p>
+</div></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ================= i18n ================= */
+const L={
+en:{
+ menu:'Menu',close:'Close',
+ disc:'Local demo · synthetic data · no external dependencies · not investment advice',
+ 'nav.t':'Workspace','n1':'Signal Workbench','n2':'Data & Evidence','n3':'Relationship Graph','n4':'Factors & Modeling','n5':'Technology Asset Signal','n6':'Signal Delivery',
+ 's1':'Workbench','s2':'Evidence','s3':'Relations','s4':'Factors','s5':'Signal','s6':'Delivery',
+ 'st.tag':'Local demo','st.line':'Technology asset → relationship structure, factor computation → capital signal','st.ws':'Workspace','st.wsv':'Research sandbox','st.ver':'Version',
+ 'h.eb':'Technology Asset Signal Infrastructure','h.h':'From evidence to a signal you can explain.',
+ 'h.p':'From evidence and competitive structure to technology-asset signals that are explainable and deliverable.','h.cta':'Open the workbench','h.link':'Follow the pipeline',
+ 'band.k':'Technology signal · GPU','cap':'Signal evolution prototype / 01 · 24 synthetic paths · Not a price forecast',
+ 'p.eb':'Positioning',
+ 'p1.k':'Core object','p1.v':'Technology assets — this demo uses GPU technology assets as the example subject.',
+ 'p2.k':'Core chain','p2.v':'Evidence → competitive relationship structure → factors & modeling → signal → delivery → capital buyers.',
+ 'p3.k':'Current state','p3.v':'Local demo · synthetic data · no external dependencies · not investment advice.',
+ 'o.eb':'01 · Overview / Signal Workbench','o.h':'Technology Asset Signal Infrastructure',
+ 'o.p':'From evidence and competitive relationship structure to technology-asset signals that are explainable and deliverable.',
+ 'f1':'Data & Evidence','f2':'Asset Relationship Model','f3':'Factors & Modeling','f4':'SIGNAL','f5':'Delivery','f6':'Capital Buyers',
+ 'm1':'Evidence Records','m1z':'证据记录数','m2':'Asset Relationships','m2z':'资产关系数','m3':'Relation Adjustment','m3z':'关系修正值','m4':'Technology Signal','m4z':'技术信号评分',
+ 'm1.s':'5 evidence categories','m2.s':'GPU ↔ ASIC / HBM / software stack','m3.s':'points, from the relationship structure','m4.s':'0–100 demo score · not a return forecast',
+ run:'▶ Run simulation',reset:'Reset parameters','run.why':'Run simulation is the global trigger that drives every downstream panel.',
+ 'run.last':'Last run','run.dirty':'Parameters changed — press Run simulation to update downstream.','bar.t':'Parameters changed','stale':'Stale',
+ 'e.eb':'02 · Data & Evidence Layer','e.h':'Evidence, standardized.',
+ 'e.p':'A demo flow of collect → deduplicate → entity mapping → relationship evidence, standardized. No external data source is connected.',
+ 'es1':'Collect','es2':'Deduplicate','es3':'Entity mapping','es4':'Relationship evidence',
+ 'c1.n':'Patents & IP','c1.d':'Claims / Citations / Technical coverage',
+ 'c2.n':'Papers & technical validation','c2.d':'Performance metrics / Maturity / Experimental results',
+ 'c3.n':'Company & industry disclosures','c3.d':'Commercial deployment / Supply & demand / Capex',
+ 'c4.n':'Listed-company booked patents','c4.d':'Patent-right carrying values recognized in annual-report intangible-asset notes',
+ 'c5.n':'Time & events','c5.d':'Product launches / Licensing / Procurement windows',
+ 'e.tr':'Evidence trace','e.src':'View evidence source','e.sub':'Relation subject','e.cat':'Category','e.date':'Sample date','e.stat':'Status','e.syn':'Synthetic sample',
+ 'e.note':'Editing a relationship by hand is a scenario assumption. It does not mean the linked evidence has been re-verified.',
+ 'EV-001':'Patent families around GPU parallel-programming models and compiler stacks keep widening, building ecosystem-level rights barriers.',
+ 'EV-002':'For training workloads, dedicated ASICs approach same-generation GPUs on energy efficiency at specific precisions and batch sizes.',
+ 'EV-003':'High-bandwidth memory supply is tight and is the main constraint on high-end GPU delivery pace.',
+ 'EV-004':'A cloud provider discloses a volume procurement window for its next-generation in-house ASIC within the next two quarters.',
+ 'r.eb':'03 · Asset Relationship Model','r.h':'Structure as input.','r.p':'Structured relationship input.',
+ 'rl.asic':'GPU ↔ ASIC','rl.hbm':'GPU ↔ HBM','rl.sw':'GPU ↔ Software stack',
+ 'ty.substitute':'Substitute','ty.complement':'Complement','ty.confront':'Confront',
+ 'r.insp':'Relationship inspector','r.type':'Relationship type','r.str':'Relationship strength','r.ev':'Linked evidence (synthetic samples)',
+ 'nm.gpu':'GPU Technology Asset','nm.asic':'ASIC Dedicated Compute','nm.hbm':'HBM High-Bandwidth Memory','nm.sw':'Compute Software Stack',
+ 'role.gpu':'Central asset','role.asic':'Substitute route','role.hbm':'Enabling asset','role.sw':'Ecosystem asset',
+ 'sh.gpu':'GPU','sh.asic':'ASIC','sh.hbm':'HBM','sh.sw':'SW stack',
+ 'r.out':'Asset / Entity / Relation type / Strength / Evidence ID → input to the Factors & Modeling layer',
+ 'r.hint':'After changing a relationship, press Run simulation to update downstream scores.',
+ 'f.eb':'04 · Factor Engine & Model Pipeline','f.h':'Three factors, one pipeline.',
+ 'ft':'Technology','ft.d':'Maturity / Performance / Scalability','fi':'IP','fi.d':'Patent coverage / Barriers / Right stability',
+ 'fi.b':'Booked-patent verification','fi.bd':'Confirmed under listed-company intangible-asset reporting','fd':'Industry','fd.d':'Industry demand / Commercialization / Supply conditions',
+ 'f.w':'Weights: Technology 45% · IP 30% · Industry 25%. The relationship structure is consumed by the downstream competition model.',
+ 'f.win':'Time window','d30':'30 days','d90':'90 days','d180':'180 days','f.evt':'Event scenario',
+ 'ev.neutral':'Neutral · no new catalyst','ev.positive':'Positive · technical validation completed','ev.stress':'Stressed · commercialization delayed',
+ 'f.pipe':'Modeling pipeline','ps1':'Factor Engine','ps2':'Competition Model','ps3':'Time / Event Model','ps4':'Simulation Engine',
+ 'ps1.d':'Technology 45 · IP 30 · Industry 25','ps2.d':'Relationship structure → points','ps3.d':'Scenario adjustment over the window','ps4.d':'24 synthetic paths, seeded',
+ 'f.chart':'Signal evolution','f.win.l':'Window','f.note':'Demonstration trajectories — not a price forecast or a statistical confidence interval.','lg.p':'24 synthetic paths','lg.m':'Mean path',
+ 's.eb':'05 · Signal Output','s.h':'One score, two ways to read it.',
+ 'rt.STRONG':'Strong technology-asset signal','rt.MODERATE':'Moderate technology-asset signal','rt.WATCH':'Technology asset to watch',
+ 'k.ip':'IP booked verification','k.rel':'Relation structure adjustment','k.evt':'Event window adjustment','k.win':'Observation window','k.ev':'Evidence trace',
+ 'v.on':'Confirmed (+5 on IP)','v.off':'Not applied','v.days':'days','pts':'pts',
+ 's.exp':'↓ Export signal JSON','s.note':'The rating is for interface demonstration only. It is not a buy or sell recommendation or evidence of real predictive power.',
+ 'd.eb':'06 · Delivery & Capital Buyers','d.h':'Two ways out, to those who allocate capital.',
+ 'd.m.d':'Local JSON export is implemented.','d.h.d':'Research summary / graph / signal panel',
+ 'd.b':'Capital buyers','d.b.t':'Institutions / Funds / Quant teams / Research departments','d.b.d':'The same signal, read by machines or people.',
+ 'd.note':'API, MCP and buyer distribution are an architecture display. No service or trading system is connected.',
+ 'toast.run':'Simulation complete','toast.reset':'Parameters reset','toast.export':'Signal JSON exported','toast.copied':'Signal JSON copied to clipboard'
+},
+zh:{
+ menu:'菜单',close:'关闭',
+ disc:'本地演示 · 合成数据 · 无外部依赖 · 非投资建议',
+ 'nav.t':'工作区导航','n1':'信号工作台','n2':'数据与证据','n3':'竞争关系图谱','n4':'因子与建模','n5':'技术资产信号','n6':'信号交付',
+ 's1':'工作台','s2':'证据','s3':'关系','s4':'因子','s5':'信号','s6':'交付',
+ 'st.tag':'本地演示','st.line':'技术资产 → 关系结构，因子计算 → 资本信号','st.ws':'当前工作区','st.wsv':'研究沙盒','st.ver':'版本',
+ 'h.eb':'技术资产信号基础设施','h.h':'从证据，到可解释的技术资产信号。',
+ 'h.p':'从证据与竞争关系结构，到可解释、可交付的技术资产信号。','h.cta':'进入信号工作台','h.link':'查看信号链路',
+ 'band.k':'技术信号 · GPU','cap':'信号演化原型 / 01 · 24 条合成路径 · 非价格预测',
+ 'p.eb':'产品定位',
+ 'p1.k':'核心对象','p1.v':'技术资产——本演示以 GPU 技术资产为示例主体。',
+ 'p2.k':'核心链路','p2.v':'证据 → 竞争关系结构 → 因子与建模 → 信号 → 交付 → 资本买方。',
+ 'p3.k':'当前状态','p3.v':'本地演示 · 合成数据 · 无外部依赖 · 非投资建议。',
+ 'o.eb':'01 · 总览 / 信号工作台','o.h':'技术资产信号基础设施',
+ 'o.p':'从证据与竞争关系结构，到可解释、可交付的技术资产信号。',
+ 'f1':'数据与证据','f2':'技术资产竞争关系模型','f3':'因子与建模','f4':'SIGNAL','f5':'交付','f6':'资本买方',
+ 'm1':'Evidence Records','m1z':'证据记录数','m2':'Asset Relationships','m2z':'资产关系数','m3':'Relation Adjustment','m3z':'关系修正值','m4':'Technology Signal','m4z':'技术信号评分',
+ 'm1.s':'5 类证据','m2.s':'GPU ↔ ASIC / HBM / 软件栈','m3.s':'分，来自关系结构','m4.s':'0–100 演示评分 · 非收益预测',
+ run:'▶ 运行模拟',reset:'重置参数','run.why':'「运行模拟」是驱动全部下游面板的全局计算触发器。',
+ 'run.last':'上次运行','run.dirty':'参数已修改——点击「运行模拟」更新下游。','bar.t':'参数已修改','stale':'已过期',
+ 'e.eb':'02 · 数据与证据层','e.h':'证据，标准化。',
+ 'e.p':'采集 → 去重 → 实体映射 → 关系证据的标准化演示流程，当前未连接外部数据源。',
+ 'es1':'采集','es2':'去重','es3':'实体映射','es4':'关系证据',
+ 'c1.n':'专利与知识产权','c1.d':'权利要求 / 引用 / 技术覆盖',
+ 'c2.n':'论文与技术验证','c2.d':'性能指标 / 成熟度 / 实验结果',
+ 'c3.n':'公司与产业披露','c3.d':'商业落地 / 供需 / 资本开支',
+ 'c4.n':'上市公司已入表专利','c4.d':'年报无形资产附注中已确认的专利权账面价值',
+ 'c5.n':'时间与事件','c5.d':'产品发布 / 授权 / 采购窗口',
+ 'e.tr':'证据追溯表','e.src':'查看证据来源','e.sub':'关系主体','e.cat':'类别','e.date':'样例时间','e.stat':'状态','e.syn':'合成样例',
+ 'e.note':'手动修改关系属于情景假设，不代表关联证据已被重新验证。',
+ 'EV-001':'GPU 并行编程模型与编译栈相关专利族覆盖持续扩大，形成生态层面的权利壁垒。',
+ 'EV-002':'训练场景下，专用 ASIC 在特定精度与批量条件下的能效指标已接近同代 GPU。',
+ 'EV-003':'高带宽存储供给偏紧，成为高端 GPU 交付节奏的主要约束项。',
+ 'EV-004':'某云厂商披露下一代自研 ASIC 的规模采购窗口，时间落在未来两个季度内。',
+ 'r.eb':'03 · 技术资产竞争关系模型层','r.h':'把结构，作为输入。','r.p':'结构化关系输入。',
+ 'rl.asic':'GPU ↔ ASIC','rl.hbm':'GPU ↔ HBM','rl.sw':'GPU ↔ 软件栈',
+ 'ty.substitute':'替代','ty.complement':'互补','ty.confront':'对抗',
+ 'r.insp':'关系检查器','r.type':'竞争关系类型','r.str':'关系强度','r.ev':'关联证据（合成样例）',
+ 'nm.gpu':'GPU 技术资产','nm.asic':'ASIC 专用计算','nm.hbm':'HBM 高带宽存储','nm.sw':'计算软件栈',
+ 'role.gpu':'中心资产','role.asic':'替代技术路线','role.hbm':'配套技术资产','role.sw':'生态技术资产',
+ 'sh.gpu':'GPU','sh.asic':'ASIC','sh.hbm':'HBM','sh.sw':'软件栈',
+ 'r.out':'资产 / 主体 / 关系类型 / 强度 / 证据 ID → 作为因子与建模层输入',
+ 'r.hint':'修改关系后，点击「运行模拟」更新下游评分。',
+ 'f.eb':'04 · 因子与建模层','f.h':'三个因子，一条流水线。',
+ 'ft':'技术','ft.d':'成熟度 / 性能 / 可扩展性','fi':'知识产权','fi.d':'专利覆盖 / 壁垒 / 权利稳定性',
+ 'fi.b':'已入表验证','fi.bd':'上市公司无形资产口径确认','fd':'行业','fd.d':'产业需求 / 商业化 / 供给条件',
+ 'f.w':'权重：技术 45% / IP 30% / 行业 25%，关系结构由下游竞争模型消费。',
+ 'f.win':'时间窗口','d30':'30 天','d90':'90 天','d180':'180 天','f.evt':'事件情景',
+ 'ev.neutral':'中性 · 无新增催化','ev.positive':'积极 · 技术验证完成','ev.stress':'承压 · 商业化延迟',
+ 'f.pipe':'建模流水线','ps1':'因子引擎','ps2':'竞争模型','ps3':'时间 / 事件模型','ps4':'仿真引擎',
+ 'ps1.d':'技术 45 · IP 30 · 行业 25','ps2.d':'关系结构 → 修正分','ps3.d':'窗口内的情景调整','ps4.d':'24 条合成路径（固定种子）',
+ 'f.chart':'信号演化','f.win.l':'窗口','f.note':'演示轨迹，不是价格预测或统计置信区间。','lg.p':'24 条合成路径','lg.m':'均值路径',
+ 's.eb':'05 · 信号输出','s.h':'一个评分，两种读法。',
+ 'rt.STRONG':'较强技术资产信号','rt.MODERATE':'中等技术资产信号','rt.WATCH':'待观察技术资产信号',
+ 'k.ip':'IP 已入表验证','k.rel':'关系结构修正','k.evt':'事件窗口调整','k.win':'观察窗口','k.ev':'证据追溯',
+ 'v.on':'已确认（IP +5）','v.off':'未启用','v.days':'天','pts':'分',
+ 's.exp':'↓ 导出信号 JSON','s.note':'评分等级仅用于界面演示，不代表买卖建议或真实预测能力。',
+ 'd.eb':'06 · 信号交付与资本买方','d.h':'两种交付方式，送到配置资本的人。',
+ 'd.m.d':'本地 JSON 导出已实现。','d.h.d':'研究摘要 / 图谱 / 信号面板',
+ 'd.b':'资本买方','d.b.t':'机构 / 基金 / 量化团队 / 研究部门','d.b.d':'同一份信号，机器读，人也读。',
+ 'd.note':'API、MCP、买方分发为架构展示，当前未连接服务或交易系统。',
+ 'toast.run':'模拟完成','toast.reset':'参数已重置','toast.export':'已导出信号 JSON','toast.copied':'信号 JSON 已复制到剪贴板'
+}};
+let lang=(function(){try{const s=localStorage.getItem('wfl-lang');if(s==='en'||s==='zh')return s;}catch(e){}return(navigator.language||'').toLowerCase().indexOf('zh')===0?'zh':'en';})();
+const t=k=>(L[lang][k]!==undefined?L[lang][k]:(L.en[k]!==undefined?L.en[k]:k));
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), pad=n=>String(n).padStart(2,'0');
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ================= model ================= */
+const DEF={rel:{asic:{type:'substitute',s:62},hbm:{type:'complement',s:78},sw:{type:'complement',s:84}},T:74,IP:62,I:66,booked:true,win:90,evt:'neutral'};
+const clone=o=>JSON.parse(JSON.stringify(o));
+let P=clone(DEF),R=null,runN=0,selRel='asic',tab='hr',openEv=null;
+const SGN={complement:1,substitute:-1,confront:-1.3},RW={asic:.4,hbm:.25,sw:.35},COL={substitute:'var(--sub)',complement:'var(--com)',confront:'var(--con)'};
+const EVID=[
+ {id:'EV-001',rel:'sw',cat:1,date:'2026-Q1'},{id:'EV-002',rel:'asic',cat:2,date:'2026-Q1'},
+ {id:'EV-003',rel:'hbm',cat:3,date:'2026-Q2'},{id:'EV-004',rel:'asic',cat:5,date:'2026-Q2'}];
+const REL_EV={asic:['EV-002','EV-004'],hbm:['EV-003'],sw:['EV-001']};
+const CATS=[[1,48,'#191814'],[2,36,'#55524a'],[3,28,'#76663f'],[4,19,'#b3ac98'],[5,16,'#ece6d6']];
+const NODE={gpu:{x:180,y:146},asic:{x:62,y:62},hbm:{x:298,y:62},sw:{x:180,y:244}};
+const SECS=['overview','evidence','relations','factors','signal','delivery'];
+function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function mulberry(a){return function(){a=(a+0x6D2B79F5)>>>0;let x=a;x=Math.imul(x^x>>>15,x|1);x^=x+Math.imul(x^x>>>7,x|61);return((x^x>>>14)>>>0)/4294967296;};}
+function compute(p){
+  let S=0;Object.keys(RW).forEach(k=>{S+=RW[k]*SGN[p.rel[k].type]*p.rel[k].s/100;});
+  const relAdj=Math.round(S*200)/10,ipEff=Math.min(100,p.IP+(p.booked?5:0)),base=.45*p.T+.30*ipEff+.25*p.I;
+  const eb={neutral:0,positive:5,stress:-6}[p.evt],evtAdj=Math.round(eb*(.6+.4*p.win/180)*10)/10;
+  const score=Math.round(clamp(base+relAdj+evtAdj,0,100)),rating=score>=70?'STRONG':score>=55?'MODERATE':'WATCH';
+  const key=JSON.stringify(p),rnd=mulberry(hash(key)),N=24,STEPS=30,drift=(eb*.9+S*4)/STEPS,sig=(2.5+p.win/180*4)/Math.sqrt(STEPS);
+  const gauss=()=>Math.sqrt(-2*Math.log(rnd()+1e-9))*Math.cos(6.2832*rnd());
+  const paths=[];for(let i=0;i<N;i++){let y=score;const a=[y];for(let s=0;s<STEPS;s++){y=clamp(y+drift+sig*gauss(),0,100);a.push(y);}paths.push(a);}
+  const mean=[];for(let s=0;s<=STEPS;s++){let m=0;for(let i=0;i<N;i++)m+=paths[i][s];mean.push(m/N);}
+  return{key:key,S:S,base:base,ipEff:ipEff,relAdj:relAdj,evtAdj:evtAdj,score:score,rating:rating,paths:paths,mean:mean,STEPS:STEPS,N:N,win:p.win,p:clone(p),at:new Date()};
+}
+const fmtS=v=>(v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(1);
+const hhmmss=d=>pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+const isDirty=()=>!R||JSON.stringify(P)!==R.key;
+
+/* ================= renderers ================= */
+function renderStrip(){
+  $('#stripIn').innerHTML=SECS.map((s,i)=>`<button data-go="${s}"><b>0${i+1}</b>${t('s'+(i+1))}</button>`).join('');
+  $('#menuNav').innerHTML=SECS.map((s,i)=>`<a href="#${s}" data-close><span>0${i+1}</span>${t('n'+(i+1))}</a>`).join('');
+  onScroll(true);
+}
+function renderFlow(){
+  $('#flow').innerHTML=[['evidence',1],['relations',2],['factors',3],['signal',4],['delivery',5],['delivery',6]].map(a=>`<button data-go="${a[0]}"><span class="n">0${a[1]}</span><span class="t">${t('f'+a[1])}</span><span class="ar">↓</span></button>`).join('');
+}
+function renderMets(){
+  const r=R,vals=[147,3,r?fmtS(r.relAdj):'—',r?r.score:'—'],units=['','','pts',''];
+  $('#mets').innerHTML=[1,2,3,4].map((i,k)=>`<div class="met ${i>2?'down':''}"><div class="k">${t('m'+i)}<span>${lang==='zh'?t('m'+i+'z'):''}</span></div><div class="n">${vals[k]}${i===3?'<small>'+t('pts')+'</small>':''}</div><div class="s">${t('m'+i+'.s')}</div></div>`).join('');
+}
+function renderRunSt(){
+  const d=isDirty();
+  $('#runst').className='runst'+(d?' dirty':'');
+  $('#runst').textContent=d?t('run.dirty'):(R?`${t('run.last')} · #${runN} · ${hhmmss(R.at)} · ${R.N} ${lang==='zh'?'条路径':'paths'} · ${R.win}${lang==='zh'?' 天窗口':'-day window'}`:'');
+  $('#runbar').classList.toggle('on',d);document.body.classList.toggle('stale',d);
+}
+function renderEvidence(){
+  $('#steps4').innerHTML=[1,2,3,4].map(i=>`<span>${t('es'+i)}</span>`).join('<span class="a">→</span>');
+  const tot=CATS.reduce((a,c)=>a+c[1],0);
+  $('#ebar').innerHTML=CATS.map(c=>`<i style="width:${c[1]/tot*100}%;background:${c[2]}"></i>`).join('');
+  $('#cats').innerHTML=CATS.map(c=>`<div class="cat"><span class="sq" style="background:${c[2]}"></span><span class="nm">${t('c'+c[0]+'.n')}</span><span class="ct">${c[1]}</span><span class="ds" style="color:var(--bone-2)">${t('c'+c[0]+'.d')}</span></div>`).join('');
+  $('#evlist').innerHTML=EVID.map(e=>{const open=openEv===e.id;return `<div class="evr" style="border-color:var(--dk-rule)"><button data-ev="${e.id}" aria-expanded="${open}"><span class="id">${e.id}</span><span class="tx">${t(e.id)}<span class="sb">${t('e.sub')} · ${t('rl.'+e.rel)}</span></span><span class="pl">${open?'−':'+'}</span></button>${open?`<div class="dt" style="color:var(--bone-2)"><b>${t('e.cat')}</b><span>${t('c'+e.cat+'.n')}</span><b>${t('e.date')}</b><span class="mono">${e.date}</span><b>${t('e.stat')}</b><span>${t('e.syn')} · ${t('e.src')}</span></div>`:''}</div>`;}).join('');
+}
+function renderGraph(){
+  const ks=['asic','hbm','sw'],g=NODE.gpu;
+  let s='';
+  ks.forEach(k=>{const r=P.rel[k],n=NODE[k],on=k===selRel,w=1.5+r.s/100*5.5,mx=(g.x+n.x)/2,my=(g.y+n.y)/2;
+    s+=`<g data-rel="${k}" style="cursor:pointer"><line x1="${g.x}" y1="${g.y}" x2="${n.x}" y2="${n.y}" stroke="${COL[r.type]}" stroke-width="${w.toFixed(1)}" opacity="${on?1:.42}" ${r.type==='confront'?'stroke-dasharray="7 5"':''}/><line x1="${g.x}" y1="${g.y}" x2="${n.x}" y2="${n.y}" stroke="transparent" stroke-width="30"/></g>`;
+    if(on)s+=`<g pointer-events="none"><rect x="${mx-40}" y="${my-11}" width="80" height="22" fill="#f7f4ec" stroke="${COL[r.type]}"/><text x="${mx}" y="${my+4}" text-anchor="middle" font-size="11" font-weight="600" fill="${COL[r.type]}">${t('ty.'+r.type)} ${r.s}</text></g>`;});
+  ['asic','hbm','sw'].forEach(k=>{const n=NODE[k],on=k===selRel;
+    s+=`<g data-rel="${k}" style="cursor:pointer"><circle cx="${n.x}" cy="${n.y}" r="32" fill="#f7f4ec" stroke="#191814" stroke-width="${on?3:1.5}"/><text x="${n.x}" y="${n.y+4}" text-anchor="middle" font-size="12" font-weight="700" fill="#191814">${t('sh.'+k)}</text><text class="rl" x="${n.x}" y="${k==='sw'?n.y+50:n.y-40}" text-anchor="middle">${t('role.'+k)}</text></g>`;});
+  s+=`<circle cx="${g.x}" cy="${g.y}" r="42" fill="#191814"/><text x="${g.x}" y="${g.y+5}" text-anchor="middle" font-size="15" font-weight="700" fill="#ece6d6">GPU</text><text class="rl" x="${g.x}" y="${g.y+58}" text-anchor="middle">${t('role.gpu')}</text>`;
+  $('#gv').innerHTML=s;
+  $('#relChips').innerHTML=ks.map(k=>`<button class="${k===selRel?'on':''}" data-rel="${k}">${t('rl.'+k)}</button>`).join('');
+  $('#legend').innerHTML=['substitute','complement','confront'].map(k=>`<span><i style="border-color:${COL[k]};${k==='confront'?'border-top-style:dashed':''}"></i>${t('ty.'+k)}</span>`).join('');
+  $('#key').innerHTML=['gpu','asic','hbm','sw'].map(k=>`<li><span>${t('nm.'+k)}</span><span>${t('role.'+k)}</span></li>`).join('');
+}
+function renderInspector(){
+  const r=P.rel[selRel];
+  $('#inspTag').textContent=t('rl.'+selRel);
+  $('#relType').value=r.type;$('#relStr').value=r.s;$('#relStrV').textContent=r.s;
+  $('#inspEv').innerHTML=REL_EV[selRel].map(id=>`<div class="evi"><b>${id}</b><span>${t(id)}</span></div>`).join('');
+  $('#outs').innerHTML=['asic','hbm','sw'].map(k=>{const q=P.rel[k];return `<div class="r"><span class="a">GPU ↔ ${t('sh.'+k)}</span><span class="s" style="color:${COL[q.type]}">${q.s}</span><span class="m">${t('ty.'+q.type)} · ${REL_EV[k].join(', ')}</span></div>`;}).join('');
+  $('#outNote').textContent=t('r.out');
+}
+function renderInputs(){
+  $('#inT').value=P.T;$('#inIP').value=P.IP;$('#inI').value=P.I;$('#inBk').checked=P.booked;$('#inWin').value=P.win;$('#inEvt').value=P.evt;
+  $('#vT').textContent=P.T;$('#vIP').textContent=P.IP;$('#vI').textContent=P.I;
+}
+function renderPipe(actIdx){
+  const r=R,o=[r?r.base.toFixed(1):'—',r?fmtS(r.relAdj):'—',r?fmtS(r.evtAdj):'—',r?r.mean[r.STEPS].toFixed(1):'—'];
+  $('#pipe').innerHTML=[1,2,3,4].map((i,k)=>`<div class="stg ${actIdx===k?'act':''}" style="border-color:var(--dk-rule)"><span class="n">0${i}</span><span class="t">${t('ps'+i)}</span><span class="o">${o[k]}</span><span class="d">${t('ps'+i+'.d')}</span></div>`).join('');
+}
+function fanSvg(r){
+  const W=320,H=210,L=32,Rm=34,T=12,B=26,all=[].concat.apply([],r.paths);
+  let mn=Math.floor(Math.min.apply(null,all)/5)*5-2,mx=Math.ceil(Math.max.apply(null,all)/5)*5+2;mn=Math.max(0,mn);mx=Math.min(100,mx);if(mx-mn<10)mx=mn+10;
+  const X=s=>L+(W-L-Rm)*s/r.STEPS,Y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn)),step=(mx-mn)>30?10:5;
+  let g='';for(let v=Math.ceil(mn/step)*step;v<=mx;v+=step)g+=`<line class="g" x1="${L}" x2="${W-Rm}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L-6}" y="${Y(v)+3}" text-anchor="end">${v}</text>`;
+  [0,1/3,2/3,1].forEach(f=>{g+=`<text x="${X(f*r.STEPS)}" y="${H-8}" text-anchor="${f===0?'start':f===1?'end':'middle'}">D${Math.round(f*r.win)}</text>`;});
+  const pl=a=>a.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ');
+  const paths=r.paths.map(a=>`<path d="${pl(a)}" fill="none" stroke="#76663f" stroke-opacity=".24" stroke-width="1"/>`).join('');
+  const m=r.mean,end=m[r.STEPS];
+  return `<svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('f.chart'))}">${g}${paths}<path d="${pl(m)}" fill="none" stroke="#191814" stroke-width="2.6" stroke-linejoin="round"/><circle cx="${X(0)}" cy="${Y(m[0])}" r="3.5" fill="#191814"/><circle cx="${X(r.STEPS)}" cy="${Y(end)}" r="4" fill="#191814"/><text x="${X(r.STEPS)+8}" y="${Y(end)+3}" style="fill:#191814;font-weight:500">${end.toFixed(1)}</text></svg>`;
+}
+function renderChart(){
+  if(!R)return;
+  $('#chartBox').innerHTML=fanSvg(R);
+  $('#winL').textContent=t('f.win.l')+' · '+R.win+(lang==='zh'?' 天':'D');
+  $('#lgd').innerHTML=`<span><i style="border-color:#76663f;opacity:.6"></i>${t('lg.p')}</span><span><i style="border-color:#191814;border-top-width:3px"></i>${t('lg.m')}</span>`;
+}
+function humanText(r){
+  const ev=t('ev.'+r.p.evt).toLowerCase(),evz=t('ev.'+r.p.evt);
+  if(lang==='zh')return `GPU 技术资产的演示评分为 ${r.score}/100（${t('rt.'+r.rating)}）。技术 ${r.p.T}、知识产权 ${r.p.IP}${r.p.booked?'（含已入表验证 +5）':''}、行业 ${r.p.I} 按 45/30/25 加权得 ${r.base.toFixed(1)}；关系结构修正 ${fmtS(r.relAdj)} 分；「${evz}」情景在 ${r.win} 天窗口内调整 ${fmtS(r.evtAdj)} 分。${r.N} 条合成路径在第 ${r.win} 天的均值为 ${r.mean[r.STEPS].toFixed(1)}。这是演示评分，不是收益预测，也不构成投资建议。`;
+  return `The GPU technology asset scores ${r.score}/100 (${t('rt.'+r.rating).toLowerCase()}). Technology ${r.p.T}, IP ${r.p.IP}${r.p.booked?' (including +5 booked-patent verification)':''} and Industry ${r.p.I} combine at 45/30/25 to ${r.base.toFixed(1)}; the relationship structure adds ${fmtS(r.relAdj)} points, and the “${ev}” scenario adds ${fmtS(r.evtAdj)} over the ${r.win}-day window. ${r.N} synthetic paths average ${r.mean[r.STEPS].toFixed(1)} at day ${r.win}. This is a demonstration score — not a return forecast and not investment advice.`;
+}
+function jsonObj(r){
+  const catKeys=['patents_ip','papers_validation','company_disclosures','listed_booked_patents','time_events'];
+  const by={};CATS.forEach((c,i)=>{by[catKeys[i]]=c[1];});
+  return{schema_version:'wfl.signal/0.2',asset:{id:'GPU',name:'GPU Technology Asset',type:'technology_asset',workspace:'research_sandbox'},
+    evidence_snapshot:{records:147,by_category:by,trace:EVID.map(e=>e.id),source:'synthetic'},
+    relation_structure:['asic','hbm','sw'].map(k=>({pair:'GPU<->'+{asic:'ASIC',hbm:'HBM',sw:'SOFTWARE_STACK'}[k],type:r.p.rel[k].type,strength:r.p.rel[k].s,evidence:REL_EV[k]})),
+    factors:{technology:r.p.T,ip:r.p.IP,industry:r.p.I,ip_booked_verified:r.p.booked},
+    weights:{technology:.45,ip:.30,industry:.25},
+    modeling_pipeline:[{stage:'factor_engine',output:+r.base.toFixed(1)},{stage:'competition_model',output:r.relAdj},{stage:'time_event_model',scenario:r.p.evt,window_days:r.win,output:r.evtAdj},{stage:'simulation_engine',paths:r.N,seeded:true,mean_end:+r.mean[r.STEPS].toFixed(1)}],
+    signal:{score:r.score,rating:r.rating,scale:'0-100 demo score'},generated_at:r.at.toISOString(),
+    disclaimer:'Local demo. Synthetic data. No external dependencies. Not investment advice. Not a return forecast.'};
+}
+function renderSignal(){
+  if(!R)return;const r=R;
+  $('#sN').textContent=r.score;
+  $('#sRt').innerHTML=`<span class="rt p ${r.rating}">${r.rating}</span>`;
+  $('#sDesc').textContent=t('rt.'+r.rating);
+  $('#sSt').textContent=`${t('run.last')} · #${runN} · ${hhmmss(r.at)} · ${r.N} ${lang==='zh'?'条路径':'paths'} · ${r.win}${lang==='zh'?' 天窗口':'-day window'}`;
+  $('#paneH').innerHTML=`<p>${humanText(r)}</p><ul class="kv">
+   <li><span class="k">${t('k.ip')}</span><span class="v">${r.p.booked?t('v.on'):t('v.off')}</span></li>
+   <li><span class="k">${t('k.rel')}</span><span class="v">${fmtS(r.relAdj)} ${t('pts')}</span></li>
+   <li><span class="k">${t('k.evt')}</span><span class="v">${fmtS(r.evtAdj)} ${t('pts')}</span></li>
+   <li><span class="k">${t('k.win')}</span><span class="v">${r.win} ${t('v.days')}</span></li>
+   <li><span class="k">${t('k.ev')}</span><button class="v" data-go="evidence">EV-001 ~ EV-004</button></li></ul>`;
+  $('#json').textContent=JSON.stringify(jsonObj(r),null,2);
+  $('#heroN').innerHTML=r.score+'<small>/100</small>';
+  $('#heroRt').innerHTML=`<span class="rt ${r.rating}">${r.rating}</span>`;
+}
+function renderTabs(){
+  $$('.tabs button').forEach(b=>{b.classList.toggle('on',b.dataset.tab===tab);b.setAttribute('aria-selected',b.dataset.tab===tab);});
+  $('#paneH').style.display=tab==='hr'?'':'none';$('#paneM').style.display=tab==='mr'?'':'none';
+}
+
+/* ================= hero canvas (24 paths, animated on run) ================= */
+let heroP=1,heroRaf=0;
+function drawHero(){
+  const cv=$('#heroCv');if(!cv||!R)return;
+  const b=cv.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2),w=Math.round(b.width*dpr),h=Math.round(b.height*dpr);
+  if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}
+  const c=cv.getContext('2d');c.clearRect(0,0,w,h);
+  const pl=.05*w,pr=.05*w,pt=.34*h,pb=.16*h,all=[].concat.apply([],R.paths);
+  let mn=Math.max(0,Math.floor(Math.min.apply(null,all)/5)*5-2),mx=Math.min(100,Math.ceil(Math.max.apply(null,all)/5)*5+2);if(mx-mn<10)mx=mn+10;
+  const X=s=>pl+(w-pl-pr)*s/R.STEPS,Y=v=>pt+(h-pt-pb)*(1-(v-mn)/(mx-mn)),n=Math.max(1,Math.round(R.STEPS*heroP));
+  c.strokeStyle='#2e2c25';c.lineWidth=1*dpr;c.font=(10*dpr)+'px '+getComputedStyle(document.body).getPropertyValue('--mono');c.fillStyle='#8c8674';
+  for(let v=Math.ceil(mn/10)*10;v<=mx;v+=10){c.beginPath();c.moveTo(pl,Y(v));c.lineTo(w-pr,Y(v));c.stroke();c.textAlign='left';c.fillText(String(v),pl,Y(v)-4*dpr);}
+  c.textAlign='left';c.fillText('D0',pl,h-.06*h);c.textAlign='right';c.fillText('D'+R.win,w-pr,h-.06*h);
+  const line=(a,col,lw,al)=>{c.globalAlpha=al;c.strokeStyle=col;c.lineWidth=lw*dpr;c.lineJoin='round';c.beginPath();for(let s=0;s<=n;s++){const x=X(s),y=Y(a[s]);if(s)c.lineTo(x,y);else c.moveTo(x,y);}c.stroke();c.globalAlpha=1;};
+  R.paths.forEach(a=>line(a,'#ece6d6',1,.17));
+  line(R.mean,'#e88c42',2.8,1);
+  c.fillStyle='#e88c42';c.beginPath();c.arc(X(n),Y(R.mean[n]),4*dpr,0,6.2832);c.fill();
+}
+function animateHero(){
+  cancelAnimationFrame(heroRaf);
+  if(RM){heroP=1;drawHero();return;}
+  const t0=performance.now(),D=1100;heroP=0;
+  (function f(now){const k=clamp((now-t0)/D,0,1);heroP=1-Math.pow(1-k,3);drawHero();if(k<1)heroRaf=requestAnimationFrame(f);})(t0);
+}
+
+/* ================= run / actions ================= */
+let pipeTimer=[];
+function run(auto){
+  R=compute(P);runN++;
+  renderMets();renderSignal();renderChart();renderRunSt();
+  pipeTimer.forEach(clearTimeout);pipeTimer=[];
+  if(auto||RM){renderPipe(-1);}
+  else{[0,1,2,3].forEach(i=>{pipeTimer.push(setTimeout(()=>renderPipe(i),i*260));});pipeTimer.push(setTimeout(()=>renderPipe(-1),4*260));}
+  animateHero();
+  if(!auto)toast(t('toast.run'));
+}
+function reset(){P=clone(DEF);selRel='asic';renderInputs();renderGraph();renderInspector();renderRunSt();toast(t('toast.reset'));}
+let toastT;
+function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),2400);}
+async function exportJSON(){
+  if(!R)return;const txt=JSON.stringify(jsonObj(R),null,2),name='wfl-signal-'+R.score+'-'+R.win+'d.json';
+  $('#expM').textContent=name+' · '+(txt.length/1024).toFixed(1)+' KB';
+  /* 1) hosted viewers (claude.ai artifact): mediated save with viewer confirmation */
+  let dl=null;
+  try{if(window.claude&&window.claude.use)dl=await window.claude.use('downloads');}catch(e){dl=null;}
+  if(dl){
+    try{await dl.save({filename:name,data:txt});toast(t('toast.export'));}
+    catch(e){if(!e||e.code!=='declined')toast(t('toast.copied'));if(!e||e.code!=='declined')try{navigator.clipboard.writeText(txt);}catch(_){}}
+    return;
+  }
+  /* 2) plain hosting (GitHub Pages, local file): normal browser download */
+  try{const blob=new Blob([txt],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(u),2000);}catch(e){}
+  let copied=false;
+  try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt);copied=true;}}catch(e){}
+  toast(copied?t('toast.copied'):t('toast.export'));
+}
+
+/* ================= language / scroll ================= */
+function applyLang(){
+  document.documentElement.lang=lang==='zh'?'zh-CN':'en';document.body.dataset.lang=lang;
+  $$('[data-i]').forEach(e=>{e.textContent=t(e.dataset.i);});
+  $$('button[data-lang]').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+  renderStrip();renderFlow();renderMets();renderRunSt();renderEvidence();renderGraph();renderInspector();renderPipe(-1);renderChart();renderSignal();renderTabs();
+  document.title=lang==='zh'?'WFL 技术资产信号':'WFL Technology Asset Signal';
+}
+let activeSec=-2;
+function onScroll(force){
+  let cur=-1;SECS.forEach((id,i)=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=160)cur=i;});
+  if(cur===activeSec&&!force)return;activeSec=cur;
+  const bs=$$('#strip button');bs.forEach((b,i)=>b.classList.toggle('on',i===cur));
+  if(cur>=0&&bs[cur]){const st=$('#strip');st.scrollLeft=Math.max(0,bs[cur].offsetLeft-24);}
+}
+function openOvl(){$('#menuOvl').classList.add('on');document.body.style.overflow='hidden';}
+function closeOvl(){$('#menuOvl').classList.remove('on');document.body.style.overflow='';}
+
+/* ================= events ================= */
+function goSec(id){
+  const s=document.getElementById(id);if(!s)return;
+  const off=id==='top'?0:(document.querySelector('.hd').offsetHeight+($('#strip').offsetHeight||0));
+  s.scrollIntoView();
+  setTimeout(()=>{if(Math.abs(s.getBoundingClientRect().top-off)>120){const de=document.documentElement;de.style.scrollBehavior='auto';window.scrollTo(0,Math.max(0,s.getBoundingClientRect().top+(window.pageYOffset||0)-off));de.style.scrollBehavior='';}},900);
+}
+document.addEventListener('click',e=>{
+  const an=e.target.closest('a[href^="#"]');
+  if(an&&an.getAttribute('href').length>1){e.preventDefault();closeOvl();goSec(an.getAttribute('href').slice(1));return;}
+  const el=e.target.closest('button[data-lang],[data-act],[data-go],[data-rel],[data-ev],[data-tab],[data-close]');if(!el)return;const d=el.dataset;
+  if(d.close!==undefined)closeOvl();
+  if(d.lang){lang=d.lang;try{localStorage.setItem('wfl-lang',lang);}catch(_){}applyLang();return;}
+  if(d.go){closeOvl();goSec(d.go);return;}
+  if(d.rel){selRel=d.rel;renderGraph();renderInspector();return;}
+  if(d.ev){openEv=openEv===d.ev?null:d.ev;renderEvidence();return;}
+  if(d.tab){tab=d.tab;renderTabs();return;}
+  if(d.act==='menu'){openOvl();return;}
+  if(d.act==='close'){closeOvl();return;}
+  if(d.act==='run'){run(false);return;}
+  if(d.act==='reset'){reset();return;}
+  if(d.act==='export'){exportJSON();return;}
+});
+document.addEventListener('input',e=>{
+  const id=e.target.id;
+  if(id==='relType'){P.rel[selRel].type=e.target.value;renderGraph();renderInspector();renderRunSt();}
+  else if(id==='relStr'){P.rel[selRel].s=+e.target.value;$('#relStrV').textContent=e.target.value;renderGraph();renderInspector();renderRunSt();}
+  else if(id==='inT'){P.T=+e.target.value;$('#vT').textContent=P.T;renderRunSt();}
+  else if(id==='inIP'){P.IP=+e.target.value;$('#vIP').textContent=P.IP;renderRunSt();}
+  else if(id==='inI'){P.I=+e.target.value;$('#vI').textContent=P.I;renderRunSt();}
+});
+document.addEventListener('change',e=>{
+  const id=e.target.id;
+  if(id==='inBk'){P.booked=e.target.checked;renderRunSt();}
+  else if(id==='inWin'){P.win=+e.target.value;renderRunSt();}
+  else if(id==='inEvt'){P.evt=e.target.value;renderRunSt();}
+});
+window.addEventListener('scroll',()=>onScroll(false),{passive:true});
+window.addEventListener('resize',()=>{drawHero();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOvl();});
+if(window.ResizeObserver)new ResizeObserver(()=>drawHero()).observe($('#heroCv'));
+
+/* ================= init ================= */
+renderInputs();
+R=compute(P);runN=1;
+applyLang();
+animateHero();
+</script>
+</body>
+</html>
